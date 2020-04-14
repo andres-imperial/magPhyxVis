@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\magPhyxVis\\c#\\HilbertCurve.csproj": {}
+    "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\c#\\HilbertCurve.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\magPhyxVis\\c#\\HilbertCurve.csproj": {
+    "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\c#\\HilbertCurve.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\magPhyxVis\\c#\\HilbertCurve.csproj",
+        "projectUniqueName": "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\c#\\HilbertCurve.csproj",
         "projectName": "HilbertCurve",
-        "projectPath": "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\magPhyxVis\\c#\\HilbertCurve.csproj",
+        "projectPath": "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\c#\\HilbertCurve.csproj",
         "packagesPath": "C:\\Users\\Jaxon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\magPhyxVis\\c#\\obj\\",
+        "outputPath": "C:\\Users\\Jaxon\\Desktop\\Research\\magPhyxVis\\c#\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Jaxon\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -13,10 +13,14 @@ namespace Main
         static void Main(string[] args)
         {   
 
-            int dataFolder = 1;
 
-            List<Tuple<string,BigInteger,int>> commandLines_HI_index = makeSortedTuples(dataFolder);
-            makeNewCommandFiles(commandLines_HI_index, dataFolder);
+            for (int i=2; i<=7; i++){
+
+            List<Tuple<string,BigInteger,int>> commandLines_HI_index = makeSortedTuples(i);
+            makeNewCommandFiles(commandLines_HI_index, i);
+            Console.WriteLine("finished dataset " + i);
+
+            }
 
 
 
