@@ -14,13 +14,27 @@ namespace Main
         {   
 
 
-            for (int i=2; i<=7; i++){
 
-            List<Tuple<string,BigInteger,int>> commandLines_HI_index = makeSortedTuples(i);
-            makeNewCommandFiles(commandLines_HI_index, i);
-            Console.WriteLine("finished dataset " + i);
+            makeNewCommandFiles(1);
 
-            }
+            // int[] coords1 = new int[]{0,0,0,1,0};
+            // int[] coords2 = new int[]{0,1,0,0,0};
+            // int[] coords3 = new int[]{0,3,0,0,0};
+            // int bpd = 2;
+
+            // var hIndex1 = new HilbertPoint(coords1, bpd);
+            // var hIndex2 = new HilbertPoint(coords2, bpd);
+            // var hIndex3 = new HilbertPoint(coords3, bpd);
+
+            // Console.WriteLine(hIndex1.HilbertIndex);
+            // Console.WriteLine(hIndex2.HilbertIndex);
+            // Console.WriteLine(hIndex3.HilbertIndex);
+
+
+
+            
+
+            
 
 
 
@@ -43,7 +57,9 @@ namespace Main
             return commandLines_HI_index;
         }
 
-        public static void makeNewCommandFiles(List<Tuple<string, BigInteger, int>> tuples, int folderNumber){
+        public static void makeNewCommandFiles(int folderNumber){
+            List<Tuple<string,BigInteger,int>> tuples = makeSortedTuples(folderNumber);
+
             for (int i=0; i<tuples.Count; i++){
                 string index;
                 if (i<=9){
@@ -55,6 +71,8 @@ namespace Main
                 System.IO.File.WriteAllLines(address, data);
             }
             correlateEventsAndCommands(tuples, folderNumber);
+            Console.WriteLine("finished dataset " + folderNumber);
+
         }
 
         public static void correlateEventsAndCommands(List<Tuple<string, BigInteger, int>> tuples, int folderNumber){
@@ -75,28 +93,31 @@ namespace Main
         }
         
         public static Tuple<string, BigInteger, int> commandLine_HI_initIndex(string[] command_line, int index){
-            int bpd = FindBitsPerDimension(6);
+            int bpd = FindBitsPerDimension(10);// pick so that 2^bits exceeds the largest value in any coordinate
             float SCALAR = (float)Math.Pow(10,3);
             var coords = parseCommandLine(command_line);
-            int[] scaledIntCoordinates = new int[command_line.Length];
+            int[] scaledIntCoordinates = new int[6];
+            
 
             for(int i=0; i<coords.Length; i++){
                 float floatCoordinate = (float)Double.Parse(coords[i], System.Globalization.NumberStyles.Float);
                 float scaledCoordinate = floatCoordinate * SCALAR;
                 int coordinate = (int)scaledCoordinate;
+                // if (coordinate < 0){coordinate = coordinate * -1;}
                 scaledIntCoordinates[i] = coordinate;
             }
+            foreach(var i in scaledIntCoordinates){
+                Console.Write(i + " ");
+            }Console.WriteLine(" ");
+            
+
+            
 
             string[] coordinatesWithAppendedHilbertIndex = new string[command_line.Length + 1];
             for(int i=0; i<command_line.Length; i++){
                 coordinatesWithAppendedHilbertIndex[i]=command_line[i];
             }
             HilbertPoint hilbertPoint = new HilbertPoint(scaledIntCoordinates, bpd);
-
-
-
-
-
             Tuple<string, BigInteger, int> line_HI_index = new Tuple<string, BigInteger, int>(lineToString(command_line), hilbertPoint.HilbertIndex, index);
             return line_HI_index;
         }
@@ -104,7 +125,7 @@ namespace Main
 
         public static string[] parseCommandLine(string[] line){
             string[] coords = new string[6];
-            for (int i=6; i<line.Length - 1; i++){
+            for (int i=6; i<=11; i++){
                 coords[i-6] = line[i];
             }
             return coords;

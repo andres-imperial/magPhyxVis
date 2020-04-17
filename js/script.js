@@ -7,8 +7,8 @@ console.log('Starting script');
 
 let settings = {
   NUM_FILES: 100, // change this to vary how many files of events/commands will be used
-  reorderData: true, // change this to false to turn off z-ordering
-  dataset: 'data7', // change this to use a different data set
+  reorderData: false, // change this to false to turn off z-ordering
+  dataset: 'data1', // change this to use a different data set
     // data4 - grid data
     // data6 - random data
     // data7 - random data
@@ -31,13 +31,13 @@ eventTypeVis.setScatterVis(scatter);
 // promise the param data
 let paramDataPromises = [];
 for (let i = 0; i < settings.NUM_FILES; i++) {
-  paramDataPromises.push(d3.csv(`data/${settings.dataset}/commands/commands${('0' + i).slice(-2)}.csv`));
+  paramDataPromises.push(d3.csv(`data/${settings.dataset}/commands/hilbert_sorted_commands${('0' + i).slice(-2)}.csv`));
 }
 
 // promise the event data
 let dataPromises = [];
 for (let i = 0; i <= settings.NUM_FILES; i++) {
-  dataPromises.push(d3.csv(`data/${settings.dataset}/events/events${('0' + i).slice(-2)}.csv`))
+  dataPromises.push(d3.csv(`data/${settings.dataset}/events/hilbert_sorted_events${('0' + i).slice(-2)}.csv`))
 }
 
 // load the param data
