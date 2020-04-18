@@ -19,6 +19,7 @@ namespace Main
 
 
             makeNewCommandFiles(1);
+            
 
   
 
@@ -154,6 +155,7 @@ namespace Main
             }
             commandLines_HI_index = commandLine_HI_initIndex(command_lines);
             commandLines_HI_index.Sort((a, b) => a.Item2.CompareTo(b.Item2));
+
             return commandLines_HI_index;
         }
 
@@ -193,6 +195,7 @@ namespace Main
             for(int i=0; i<int_command_lines.Count; i++){
                 var hIndex = new HilbertPoint(int_command_lines[i], bpd).HilbertIndex;
                 Tuple<string, BigInteger, int> arrangedCommandLine = new Tuple<string, BigInteger, int>(lineToString(command_lines[i]), hIndex, i);
+                commandLine_HI_initIndexes.Add(arrangedCommandLine);
                 
             }
 
@@ -233,6 +236,7 @@ namespace Main
 
         public static void makeNewCommandFiles(int folderNumber){
             List<Tuple<string,BigInteger,int>> tuples = makeSortedTuples(folderNumber);
+            
 
             for (int i=0; i<tuples.Count; i++){
                 string index;
