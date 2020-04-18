@@ -21,75 +21,57 @@ namespace Main
 
             // makeNewCommandFiles(1);
 
-            // int[] coords1 = new int[]{0,0};
-            // int[] coords2 = new int[]{0,1};
-            // int[] coords3 = new int[]{0,2};
-
-            // var hIndex1 = new HilbertPoint(coords1, bpd);
-            // var hIndex2 = new HilbertPoint(coords2, bpd);
-            // var hIndex3 = new HilbertPoint(coords3, bpd);
-
-            // Console.WriteLine(hIndex1.HilbertIndex);
-            // Console.WriteLine(hIndex2.HilbertIndex);
-            // Console.WriteLine(hIndex3.HilbertIndex);
+  
 
 
-            // int[][] coords = new int[25][];
-
-            // coords[0] = new int[2]{-2,-2};
-            // coords[1] = new int[2]{-2,-1};
-            // coords[2] = new int[2]{-2,0};
-            // coords[3] = new int[2]{-2,1};
-            // coords[4] = new int[2]{-2,2};
-
-            // coords[5] = new int[2]{-1,-2};
-            // coords[6] = new int[2]{-1,-1};
-            // coords[7] = new int[2]{-1,0};
-            // coords[8] = new int[2]{-1,1};
-            // coords[9] = new int[2]{-1,2};
-
-            // coords[10] = new int[2]{0,-2};
-            // coords[11] = new int[2]{0,-1};
-            // coords[12] = new int[2]{0,0};
-            // coords[13] = new int[2]{0,1};
-            // coords[14] = new int[2]{0,2};
-
-            // coords[15] = new int[2]{1,-2};
-            // coords[16] = new int[2]{1,-1};
-            // coords[17] = new int[2]{1,0};
-            // coords[18] = new int[2]{1,1};
-            // coords[19] = new int[2]{1,2};
-
-            // coords[20] = new int[2]{2,-2};
-            // coords[21] = new int[2]{2,-1};
-            // coords[22] = new int[2]{2,0};
-            // coords[23] = new int[2]{2,1};
-            // coords[24] = new int[2]{2,2};
-
-
-            List<int[]> coordinates = new List<int[]>();
-            for (int i=0; i<4; i++){
-                for (int j=0; j<4; j++){
-                    coordinates.Add(new int[]{i,j});
+            List<decimal[]> coordinates = new List<decimal[]>();
+            for (decimal i=-2; i<=2; i+=1m){
+                for (decimal j=-2; j<=2; j+=1.25m){
+                    coordinates.Add(new decimal[]{i,j});
                 }
             }
-            
+            multiplyCoordinates(coordinates);
+            shiftCoordinates(coordinates);
+
+            decimal[] arr = coordinates[1];
+            Console.WriteLine(arr[0] + " " + arr[1]);
+            int[] intArr = new int[]{Decimal.ToInt16(arr[0]), Decimal.ToInt16(arr[1])};
+            Console.WriteLine(intArr[0] + " " + intArr[1]);
 
             
 
-            // shiftCoordinates(coords);
-
-            foreach(int[] arr in coordinates){
-                foreach(int i in arr){
-                    Console.Write(i + " ");
-                }
-                Console.WriteLine(" ");
-            }
             
 
             
 
         }
+
+
+
+        public static void multiplyCoordinates(List<decimal[]> arr){
+            int[] dimensionHighestDecimalPlaces = getDimensionHighestDecimalPlaces(arr);
+            for(int i=0; i<dimensionHighestDecimalPlaces.Length; i++){
+                for (int j=0; j<arr.Count; j++){
+                    arr[j][i] *= 10^dimensionHighestDecimalPlaces[i];
+                }
+            }
+
+        }
+
+        public static int[] getDimensionHighestDecimalPlaces(List<decimal[]> arr){
+            int[] dimensionHighestDecimalPlaces = new int[arr[0].Length];
+            for (int i=0; i<dimensionHighestDecimalPlaces.Length; i++){
+                int maxPlaces = int.MinValue;
+                for (int j=0; j<arr.Count; j++){
+                    if (getDecimalPlaces(arr[j][i]) > maxPlaces){
+                        maxPlaces = getDecimalPlaces(arr[j][i]);
+                    }
+                }
+                dimensionHighestDecimalPlaces[i] = maxPlaces;
+            }
+         return dimensionHighestDecimalPlaces;   
+        }
+
         public static int getDecimalPlaces(decimal n){
             n = Math.Abs(n); //make sure it is positive.
             n -= (int)n;     //remove the integer part of the number.
@@ -98,35 +80,24 @@ namespace Main
             {
                 decimalPlaces++;
                 n *= 10;
-                Console.WriteLine(n);
                 n -= (int)n;
-                Console.WriteLine(n);
             }
             return decimalPlaces;
         }
 
-
-        /*
-            shift all coordinates per on a dimension by dimension basis so all values are equal to or greater than 0
-        */
-        public static void shiftCoordinates(int[][] arr){
-            int[] dimensionMins = getDimensionMins(arr);
+        public static void shiftCoordinates(List<decimal[]> arr){
+            decimal[] dimensionMins = getDimensionMins(arr);
             for (int i=0; i<dimensionMins.Length; i++){
-                for (int j=0; j<arr.Length; j++){
+                for (int j=0; j<arr.Count; j++){
                     arr[j][i] += dimensionMins[i]*-1;
                 }
             }
-        
         }
-
-        /*
-            return array of mins in each dimension of two dimensional array
-        */
-        public static int[] getDimensionMins(int[][] arr){
-            int[] dimensionMins = new int[arr[0].Length];
+        public static decimal[] getDimensionMins(List<decimal[]> arr){
+            decimal[] dimensionMins = new decimal[arr[0].Length];
             for (int i=0; i<dimensionMins.Length; i++){
-                int min = int.MaxValue;
-                for (int j=0; j<arr.Length; j++){
+                decimal min = decimal.MaxValue;
+                for (int j=0; j<arr.Count; j++){
                     if (arr[j][i] < min){
                         min = arr[j][i];
                     }
@@ -135,6 +106,35 @@ namespace Main
             }
             return dimensionMins;
         }
+
+        /*
+            shift all coordinates per on a dimension by dimension basis so all values are equal to or greater than 0
+        */
+        // public static void shiftCoordinates(int[][] arr){
+        //     int[] dimensionMins = getDimensionMins(arr);
+        //     for (int i=0; i<dimensionMins.Length; i++){
+        //         for (int j=0; j<arr.Length; j++){
+        //             arr[j][i] += dimensionMins[i]*-1;
+        //         }
+        //     }
+        // }
+
+        /*
+            return array of mins in each dimension of two dimensional array
+        */
+        // public static int[] getDimensionMins(int[][] arr){
+        //     int[] dimensionMins = new int[arr[0].Length];
+        //     for (int i=0; i<dimensionMins.Length; i++){
+        //         int min = int.MaxValue;
+        //         for (int j=0; j<arr.Length; j++){
+        //             if (arr[j][i] < min){
+        //                 min = arr[j][i];
+        //             }
+        //         }
+        //         dimensionMins[i] = min;
+        //     }
+        //     return dimensionMins;
+        // }
 
         public static List<Tuple<string, BigInteger, int>> makeSortedTuples(int folderNumber){
                 
@@ -188,6 +188,31 @@ namespace Main
             }
         }
         
+        // public static Tuple<string, BigInteger, int> commandLine_HI_initIndex(string[] command_line, int index){
+        //     int bpd = FindBitsPerDimension(10);// pick so that 2^bits exceeds the largest value in any coordinate
+        //     float SCALAR = (float)Math.Pow(10,3);
+        //     var coords = parseCommandLine(command_line);
+        //     int[] scaledIntCoordinates = new int[6];
+            
+
+        //     for(int i=0; i<coords.Length; i++){
+        //         float floatCoordinate = (float)Double.Parse(coords[i], System.Globalization.NumberStyles.Float);
+        //         float scaledCoordinate = floatCoordinate * SCALAR;
+        //         int coordinate = (int)scaledCoordinate;
+        //         // if (coordinate < 0){coordinate = coordinate * -1;}
+        //         scaledIntCoordinates[i] = coordinate;
+        //     }
+            
+        //     string[] coordinatesWithAppendedHilbertIndex = new string[command_line.Length + 1];
+        //     for(int i=0; i<command_line.Length; i++){
+        //         coordinatesWithAppendedHilbertIndex[i]=command_line[i];
+        //     }
+        //     HilbertPoint hilbertPoint = new HilbertPoint(scaledIntCoordinates, bpd);
+        //     Tuple<string, BigInteger, int> line_HI_index = new Tuple<string, BigInteger, int>(lineToString(command_line), hilbertPoint.HilbertIndex, index);
+        //     return line_HI_index;
+        // }
+
+
         public static Tuple<string, BigInteger, int> commandLine_HI_initIndex(string[] command_line, int index){
             int bpd = FindBitsPerDimension(10);// pick so that 2^bits exceeds the largest value in any coordinate
             float SCALAR = (float)Math.Pow(10,3);
@@ -202,9 +227,7 @@ namespace Main
                 // if (coordinate < 0){coordinate = coordinate * -1;}
                 scaledIntCoordinates[i] = coordinate;
             }
-            foreach(var i in scaledIntCoordinates){
-                Console.Write(i + " ");
-            }Console.WriteLine(" ");
+            
             
 
             
@@ -217,6 +240,34 @@ namespace Main
             Tuple<string, BigInteger, int> line_HI_index = new Tuple<string, BigInteger, int>(lineToString(command_line), hilbertPoint.HilbertIndex, index);
             return line_HI_index;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         public static string[] parseCommandLine(string[] line){
