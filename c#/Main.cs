@@ -158,7 +158,7 @@ namespace Main
                 int_command_lines.Add(arr);
             }
 
-            int_command_lines = playWithInts(int_command_lines);
+            // int_command_lines = playWithInts(int_command_lines);
 
             
             
@@ -213,9 +213,9 @@ namespace Main
 
         public static void makeNewCommandFiles(int folderNumber){
             List<Tuple<string,BigInteger,int>> tuples = makeSortedTuples(folderNumber);
-            // foreach (Tuple<string, BigInteger, int> tup in tuples){
-            //     Console.WriteLine("({0})({1})({2})", tup.Item1, tup.Item2, tup.Item3);
-            // }
+            foreach (Tuple<string, BigInteger, int> tup in tuples){
+                Console.WriteLine("({0})({1})({2})", tup.Item1, tup.Item2, tup.Item3);
+            }
             
 
             for (int i=0; i<tuples.Count; i++){
