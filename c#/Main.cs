@@ -112,35 +112,6 @@ namespace Main
             return dimensionMins;
         }
 
-        /*
-            shift all coordinates per on a dimension by dimension basis so all values are equal to or greater than 0
-        */
-        // public static void shiftCoordinates(int[][] arr){
-        //     int[] dimensionMins = getDimensionMins(arr);
-        //     for (int i=0; i<dimensionMins.Length; i++){
-        //         for (int j=0; j<arr.Length; j++){
-        //             arr[j][i] += dimensionMins[i]*-1;
-        //         }
-        //     }
-        // }
-
-        /*
-            return array of mins in each dimension of two dimensional array
-        */
-        // public static int[] getDimensionMins(int[][] arr){
-        //     int[] dimensionMins = new int[arr[0].Length];
-        //     for (int i=0; i<dimensionMins.Length; i++){
-        //         int min = int.MaxValue;
-        //         for (int j=0; j<arr.Length; j++){
-        //             if (arr[j][i] < min){
-        //                 min = arr[j][i];
-        //             }
-        //         }
-        //         dimensionMins[i] = min;
-        //     }
-        //     return dimensionMins;
-        // }
-
         public static List<Tuple<string, BigInteger, int>> makeSortedTuples(int folderNumber){
                 
             List<Tuple<string,BigInteger,int>> commandLines_HI_index = new List<Tuple<string, BigInteger,int>>();
@@ -151,7 +122,8 @@ namespace Main
                     index = String.Format("0{0}", i);
                 }else{index = i.ToString();}
                 string address_i = String.Format(@"..\data\data{0}\commands\commands{1}.csv", folderNumber, index);
-                command_lines.Add(readCommandFile(address_i));                
+                command_lines.Add(readCommandFile(address_i)); 
+                
             }
             commandLines_HI_index = commandLine_HI_initIndex(command_lines);
             commandLines_HI_index.Sort((a, b) => a.Item2.CompareTo(b.Item2));
@@ -164,7 +136,7 @@ namespace Main
             List<decimal[]> decimal_command_lines =  new List<decimal[]>();
             List<int[]> int_command_lines = new List<int[]>();
             List<Tuple<string, BigInteger, int>> commandLine_HI_initIndexes = new List<Tuple<string, BigInteger, int>>();
-            int bpd = FindBitsPerDimension(10);// pick so that 2^bits exceeds the largest value in any coordinate
+            int bpd = FindBitsPerDimension(59);// pick so that 2^bits exceeds the largest value in any coordinate
 
             for(int i=0; i<command_lines.Count; i++){
                 string[] parsed_command_line = parseCommandLine(command_lines[i]);
@@ -178,12 +150,6 @@ namespace Main
             multiplyCoordinates(decimal_command_lines);
             shiftCoordinates(decimal_command_lines);
 
-            // foreach(decimal[] dec in decimal_command_lines){
-            //     foreach(decimal d in dec){
-            //         Console.Write("{0} ", d);
-            //     }Console.WriteLine(" ");
-            // }
-
             for (int i=0; i<decimal_command_lines.Count; i++){
                 int[] arr = new int[decimal_command_lines[i].Length];
                 for (int j=0; j<decimal_command_lines[i].Length; j++){
@@ -192,24 +158,35 @@ namespace Main
                 int_command_lines.Add(arr);
             }
 
+            int_command_lines = playWithInts(int_command_lines);
+
+            
+            
+
             for(int i=0; i<int_command_lines.Count; i++){
                 var hIndex = new HilbertPoint(int_command_lines[i], bpd).HilbertIndex;
                 Tuple<string, BigInteger, int> arrangedCommandLine = new Tuple<string, BigInteger, int>(lineToString(command_lines[i]), hIndex, i);
                 commandLine_HI_initIndexes.Add(arrangedCommandLine);
                 
             }
-
-
-
-
-
-            // string[] coordinatesWithAppendedHilbertIndex = new string[command_line.Length + 1];
-            // for(int i=0; i<command_line.Length; i++){
-            //     coordinatesWithAppendedHilbertIndex[i]=command_line[i];
-            // }
-            // HilbertPoint hilbertPoint = new HilbertPoint(scaledIntCoordinates, bpd);
-            // Tuple<string, BigInteger, int> line_HI_index = new Tuple<string, BigInteger, int>(lineToString(command_line), hilbertPoint.HilbertIndex, index);
             return commandLine_HI_initIndexes;
+        }
+
+        public static List<int[]> playWithInts(List<int[]> arr){
+            List<int[]> modifiedArr = new List<int[]>();
+            for(int i=0; i<arr.Count; i++){
+                int[] newArr = new int[3];
+                newArr[0] = arr[i][0];
+                newArr[1] = arr[i][3];
+                newArr[2] = arr[i][4];
+                modifiedArr.Add(newArr);
+            }
+            foreach(int[] inArr in modifiedArr){
+                foreach(int i  in inArr){
+                    Console.Write(i + " ");
+                }Console.WriteLine(" ");
+            }
+            return modifiedArr;
         }
 
 
@@ -236,6 +213,9 @@ namespace Main
 
         public static void makeNewCommandFiles(int folderNumber){
             List<Tuple<string,BigInteger,int>> tuples = makeSortedTuples(folderNumber);
+            // foreach (Tuple<string, BigInteger, int> tup in tuples){
+            //     Console.WriteLine("({0})({1})({2})", tup.Item1, tup.Item2, tup.Item3);
+            // }
             
 
             for (int i=0; i<tuples.Count; i++){
@@ -270,62 +250,6 @@ namespace Main
             }
         }
         
-        // public static Tuple<string, BigInteger, int> commandLine_HI_initIndex(string[] command_line, int index){
-        //     int bpd = FindBitsPerDimension(10);// pick so that 2^bits exceeds the largest value in any coordinate
-        //     float SCALAR = (float)Math.Pow(10,3);
-        //     var coords = parseCommandLine(command_line);
-        //     int[] scaledIntCoordinates = new int[6];
-            
-
-        //     for(int i=0; i<coords.Length; i++){
-        //         float floatCoordinate = (float)Double.Parse(coords[i], System.Globalization.NumberStyles.Float);
-        //         float scaledCoordinate = floatCoordinate * SCALAR;
-        //         int coordinate = (int)scaledCoordinate;
-        //         // if (coordinate < 0){coordinate = coordinate * -1;}
-        //         scaledIntCoordinates[i] = coordinate;
-        //     }
-            
-        //     string[] coordinatesWithAppendedHilbertIndex = new string[command_line.Length + 1];
-        //     for(int i=0; i<command_line.Length; i++){
-        //         coordinatesWithAppendedHilbertIndex[i]=command_line[i];
-        //     }
-        //     HilbertPoint hilbertPoint = new HilbertPoint(scaledIntCoordinates, bpd);
-        //     Tuple<string, BigInteger, int> line_HI_index = new Tuple<string, BigInteger, int>(lineToString(command_line), hilbertPoint.HilbertIndex, index);
-        //     return line_HI_index;
-        // }
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public static string[] parseCommandLine(string[] line){
             string[] coords = new string[6];
             for (int i=6; i<=11; i++){
