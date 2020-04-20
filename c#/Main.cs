@@ -18,78 +18,78 @@ namespace Main
 
 
 
-            // makeNewCommandFiles(1);
+            makeNewCommandFiles(1);
             
 
-            int bpd = 9;
+            // int bpd = 9;
 
 
-            List<decimal[]> coordinates = new List<decimal[]>();
-            for (decimal i=1; i<=5; i+=1m){
-                for (decimal j=-2; j<=2; j+=1.25m){
-                    coordinates.Add(new decimal[]{i,j});
-                }
-            }
-            multiplyCoordinates(coordinates);
-            shiftCoordinates(coordinates);
+            // List<decimal[]> coordinates = new List<decimal[]>();
+            // for (decimal i=1; i<=5; i+=1m){
+            //     for (decimal j=-2; j<=2; j+=1.25m){
+            //         coordinates.Add(new decimal[]{i,j});
+            //     }
+            // }
+            // multiplyCoordinates(coordinates);
+            // shiftCoordinates(coordinates);
 
-            // foreach(decimal[] decArr in coordinates){
-            //     foreach(decimal coord in decArr){
-            //         Console.Write(coord + " ");
+            // // foreach(decimal[] decArr in coordinates){
+            // //     foreach(decimal coord in decArr){
+            // //         Console.Write(coord + " ");
+            // //     }Console.WriteLine(" ");
+            // // }
+
+            // List<uint[]> int_coords = new List<uint[]>();
+            // for(int i=0; i<coordinates.Count; i++){
+            //     uint[] arr = new uint[coordinates[i].Length];
+            //     for(int j=0; j<coordinates[i].Length; j++){
+            //         arr[j] = Convert.ToUInt32(coordinates[i][j]);
+            //     }
+            //     int_coords.Add(arr);
+            // }
+            // foreach(uint[] arr in int_coords){
+            //     foreach(uint ar in arr){
+            //         Console.Write(ar + " ");
             //     }Console.WriteLine(" ");
             // }
 
-            List<uint[]> int_coords = new List<uint[]>();
-            for(int i=0; i<coordinates.Count; i++){
-                uint[] arr = new uint[coordinates[i].Length];
-                for(int j=0; j<coordinates[i].Length; j++){
-                    arr[j] = Convert.ToUInt32(coordinates[i][j]);
-                }
-                int_coords.Add(arr);
-            }
-            foreach(uint[] arr in int_coords){
-                foreach(uint ar in arr){
-                    Console.Write(ar + " ");
-                }Console.WriteLine(" ");
-            }
+            // List<uint[]> appended_int_coords = new List<uint[]>();
+            // foreach(uint[] arr in int_coords){
+            //     uint[] newArr = new uint[6];
+            //     newArr[0]=0;
+            //     newArr[1]=arr[0];
+            //     newArr[2]=0;
+            //     newArr[3]=arr[1];
+            //     newArr[4]=1;
+            //     newArr[5]=0;
+            //     appended_int_coords.Add(newArr);
+            // }
 
-            List<uint[]> appended_int_coords = new List<uint[]>();
-            foreach(uint[] arr in int_coords){
-                uint[] newArr = new uint[6];
-                newArr[0]=0;
-                newArr[1]=arr[0];
-                newArr[2]=0;
-                newArr[3]=arr[1];
-                newArr[4]=1;
-                newArr[5]=0;
-                appended_int_coords.Add(newArr);
-            }
+            // foreach(uint[] arr in appended_int_coords){
+            //     foreach(uint a in arr){
+            //         Console.Write(a + " ");
+            //     }Console.WriteLine(" ");
+            // }
 
-            foreach(uint[] arr in appended_int_coords){
-                foreach(uint a in arr){
-                    Console.Write(a + " ");
-                }Console.WriteLine(" ");
-            }
+            // List<BigInteger> int_indexes = new List<BigInteger>();
+            // foreach(uint[] arr in int_coords){
+            //     int_indexes.Add(new HilbertPoint(arr, bpd).HilbertIndex);
+            // }
+            // int_indexes.Sort();
 
-            List<BigInteger> int_indexes = new List<BigInteger>();
-            foreach(uint[] arr in int_coords){
-                int_indexes.Add(new HilbertPoint(arr, bpd).HilbertIndex);
-            }
-            int_indexes.Sort();
-
-            List<BigInteger> appended_indexes = new List<BigInteger>();
-            foreach(uint[] arr in appended_int_coords){
-                appended_indexes.Add(new HilbertPoint(arr, bpd).HilbertIndex);
-            }
-            appended_indexes.Sort();
+            // List<BigInteger> appended_indexes = new List<BigInteger>();
+            // foreach(uint[] arr in appended_int_coords){
+            //     appended_indexes.Add(new HilbertPoint(arr, bpd).HilbertIndex);
+            // }
+            // appended_indexes.Sort();
             
-            for(int i=0; i<int_coords.Count; i++){
-                Console.WriteLine("({0}),({1})", new HilbertPoint(int_coords[i], bpd).HilbertIndex, new HilbertPoint(appended_int_coords[i], bpd).HilbertIndex);
-            }
-            Console.WriteLine("===============================");
-            for(int i=0; i<int_indexes.Count; i++){
-                Console.WriteLine("({0})({1})", int_indexes[i], appended_indexes[i]);
-            }
+            // for(int i=0; i<int_coords.Count; i++){
+            //     Console.WriteLine("({0}),({1})", new HilbertPoint(int_coords[i], bpd).HilbertIndex, new HilbertPoint(appended_int_coords[i], bpd).HilbertIndex);
+            // }
+            // Console.WriteLine("===============================");
+            // for(int i=0; i<int_indexes.Count; i++){
+            //     Console.WriteLine("({0})({1})", int_indexes[i], appended_indexes[i]);
+            // }
 
             
 
@@ -207,13 +207,21 @@ namespace Main
                 int_command_lines.Add(arr);
             }
 
+            List<int[]> consolidated_int_command_lines = new List<int[]>();
+            foreach(int[] arr in int_command_lines){
+                int[] newArr = new int[2];
+                newArr[0] = arr[3];
+                newArr[1] = arr[4];
+                consolidated_int_command_lines.Add(newArr);
+            }            
+
             // int_command_lines = playWithInts(int_command_lines);
 
             
             
 
-            for(int i=0; i<int_command_lines.Count; i++){
-                var hIndex = new HilbertPoint(int_command_lines[i], bpd).HilbertIndex;
+            for(int i=0; i<consolidated_int_command_lines.Count; i++){
+                var hIndex = new HilbertPoint(consolidated_int_command_lines[i], bpd).HilbertIndex;
                 Tuple<string, BigInteger, int> arrangedCommandLine = new Tuple<string, BigInteger, int>(lineToString(command_lines[i]), hIndex, i);
                 commandLine_HI_initIndexes.Add(arrangedCommandLine);
                 
