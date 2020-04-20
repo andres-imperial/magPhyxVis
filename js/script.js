@@ -13,7 +13,7 @@ let settings = {
     // data6 - random data
     // data7 - random data
     // 
-  hilbert: true, // false = use z order, true = use hilbert order
+  hilbert: false, // false = use z order, true = use hilbert order
 }
 let eventTypeVis = new EventTypeVis(settings.NUM_FILES);
 let paramVis = new ParamsVis();
