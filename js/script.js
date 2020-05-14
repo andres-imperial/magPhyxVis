@@ -6,14 +6,14 @@
 console.log('Starting script');
 
 let settings = {
-  NUM_FILES: 100, // change this to vary how many files of events/commands will be used
-  reorderData: true, // change this to false to turn off z-ordering
-  dataset: 'data7', // change this to use a different data set
+  NUM_FILES: 23, // change this to vary how many files of events/commands will be used
+  reorderData: false, // change this to false to turn off z-ordering
+  dataset: 'momentumTradingData', // change this to use a different data set
     // data4 - grid data
     // data6 - random data
     // data7 - random data
     // 
-  hilbert: true, // false = use z order, true = use hilbert order
+  hilbert: false, // false = use z order, true = use hilbert order
 }
 let eventTypeVis = new EventTypeVis(settings.NUM_FILES);
 let paramVis = new ParamsVis();
@@ -31,12 +31,13 @@ eventTypeVis.setScatterVis(scatter);
 // promise the param data
 let paramDataPromises = [];
 for (let i = 0; i < settings.NUM_FILES; i++) {
-  paramDataPromises.push(d3.csv(`data/${settings.dataset}/commands/commands${('0' + i).slice(-2)}.csv`));
+  // paramDataPromises.push(d3.csv(`data/${settings.dataset}/commands/commands${('0' + i).slice(-2)}.csv`));
+  paramDataPromises.push(d3.csv(`data/data7/commands/commands${('0' + i).slice(-2)}.csv`));
 }
 
 // promise the event data
 let dataPromises = [];
-for (let i = 0; i <= settings.NUM_FILES; i++) {
+for (let i = 0; i < settings.NUM_FILES; i++) {
   dataPromises.push(d3.csv(`data/${settings.dataset}/events/events${('0' + i).slice(-2)}.csv`))
 }
 
@@ -75,7 +76,7 @@ Promise.all([...paramDataPromises]).then((paramData) => {
           points.push(new Point(getDimensions(combinedData[i].param), combinedData[i]));
       }
 
-      points = filterPoints(points, 0.1);
+      // points = filterPoints(points, 0.1);
       orderedData = [];
       for (let i = 0; i < points.length; i++) {
           orderedData.push(points[i].data);
@@ -100,7 +101,8 @@ Promise.all([...paramDataPromises]).then((paramData) => {
 
     let distances = calcDistances(orderedParamData);
 
-    let eventTypes = ['collision', 'beta = 0', 'pr = 0', 'pphi = 0', 'ptheta = 0'];
+    // let eventTypes = ['collision', 'beta = 0', 'pr = 0', 'pphi = 0', 'ptheta = 0'];
+    let eventTypes = ['buy', 'sell', 'stay'];
     eventTypeVis.setEventCols(eventTypes);
 
     // add the event type selection boxes
@@ -124,7 +126,7 @@ Promise.all([...paramDataPromises]).then((paramData) => {
         console.log('type', type);
         let filteredData = orderedEventsData.map((d) => {
           return d.filter(d => {
-            return d[' event_type'] == type;
+            return d['event_type'] == type;
           })
         })
         eventTypeVis.update(filteredData, orderedParamData, distances);
@@ -143,6 +145,7 @@ Promise.all([...paramDataPromises]).then((paramData) => {
 
   }).catch(function (err) { 
     console.log('Error: ', err);
+    console.trace();
   })
 });
 

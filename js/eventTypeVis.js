@@ -100,7 +100,7 @@ class EventTypeVis {
 
         for (let i = 0; i < data.length; i++) {
             data[i] = data[i].filter(d => {
-                return +d[' t'] < 100;
+                return +d['t'] < 100;
             })
         }
 
@@ -108,7 +108,7 @@ class EventTypeVis {
             .domain(
                 [0, d3.max(data, (sim) => {
                     return d3.max(sim, (d) => {
-                        return d[' t'];
+                        return d['t'];
                     })
                 })]
             )
@@ -215,11 +215,11 @@ class EventTypeVis {
             .append('circle')
             .attr('simulationIndex', d => { return d.simulationIndex; })
             .attr('class', 'eventTimelinePoint')
-            .attr('cx', d => { return timeScale(+d[' t']); })
+            .attr('cx', d => { return timeScale(+d['t']); })
             .attr('cy', d => { return this.config.padding.top + d.parentIndex * this.circleSize * 2; })
             .attr('r', d => { return this.circleSize; })
             .style('fill', d => {
-                if (+d[' t'] > 50) { return 'white'; }
+                if (+d['t'] > 50) { return 'white'; }
                 return Utils.getFill(d[' event_type']);
             })
             .on('mouseover', function (d) {
